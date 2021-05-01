@@ -9,6 +9,7 @@ import numpy as np
 # all constants in cgs units
 ME = 9.1093826e-28 # electron mass in g
 MP = 1.67262171e-24 # proton mass in g
+MH = 1.673534e-24 # hydrogen atom mass in g
 CL = 2.99792458e10 # speed of light in cm s^-1
 GNEWT = 6.6742e-8 # gravitational constant in
 KBOL = 1.3806505e-16 # Boltzmann constant
@@ -133,7 +134,7 @@ def RIAF_YN_PressureDensity(MBH, Mdot, R, alpha, s, unit_dens=1, unit_pres=CL**2
     print("Pressure [code] = %e"%(pres/unit_pres))
 
 
-def TQM_PressureDensity(r, MBH, sigma, cs, unit_dens, unit_pres):
+def TQM_PressureDensity(r, MBH, sigma, cs, f_g, unit_dens, unit_pres):
     # radius r in Schwarzschild radii
     # velocity dispersion sigma in km/s
     # black hole mass MBH in MSUN
@@ -149,10 +150,13 @@ def TQM_PressureDensity(r, MBH, sigma, cs, unit_dens, unit_pres):
     sigma200 = sigma/200
     Omega = np.sqrt(2)*sigma/r_km
 
-    rho = 170.*sigma200**2*r_kpc**(-2.)/Q*ME # density in disc at r
+    rho = 170.*sigma200**2*r_kpc**(-2.)/Q*MP # density in disc at r
 
-    f_g = 2.*cs/Q/sigma # gas fraction
-    h = fg*Q/2**(3./2.)*r_kpc # disc height in kpc
+    f_g_den = 2.*cs/Q/sigma
+    f_g_actual = f_g/f_g_den
+
+    #f_g = 2.*cs/Q/sigma # gas fraction
+    h = f_g_actual*Q/2**(3./2.)*r_kpc # disc height in kpc
     h = h*KPC # disc height in cm
 
     prs = rho*h**2*Omega**2
