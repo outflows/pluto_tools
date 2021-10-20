@@ -32,6 +32,13 @@ def gamma(velocity, divided_by_c=False):
     return val
 
 
+def vel(gamma, divided_by_c=False):
+    val = np.sqrt(1-1/gamma**2)
+    if divided_by_c == False:
+        val = CL*val
+    return val
+
+
 def calcJetDensPres(lumi_total, gamma_inj, gamma_infinity, opening_angle, inner_jet_radius, unit_dens=1, unit_pres=CL**2):
     # calculates the density and pressure in real and PLUTO units (same as FLASH units where density
     # is normalized by 1 and pressure is normalized by c**2
